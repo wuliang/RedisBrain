@@ -2,30 +2,32 @@
 
 RedisBrain use Redis as backend to model some features of brain. 
 
-Some features of brain:                                                                                                                                                                                                                             |                 |
+Some features of brain:
  
- 1) Brain is structed.
+** Brain is structed.
 Brain is consist of some major components. Each compnent has its own
 structure. The minimal functional unit is neurons. 
  
- 2) Accumulable Memory
+** Accumulable Memory
 What has learned will be stored. No need to re-study.
 
- 3) Volume is limited 
+** Volume is limited 
 No matter how hard to try, it is impossible to remember every words in
 the Book named  “The dream of Red Mansion” （Chinese novel)
 
- 4) may "forget"
+** May "forget"
 Least active content may lose. Howerver, it is not just bad, since it
 give new information a oppertunity to .
 
 
-** A Brain Model with Redis
+* A Brain Model with Redis
 The basic model is "Group", each group is mapped to a sorted set(zset)
 in Redis. Each group has a volume limitaion and forget slightly
 different with others.
  
-Layers from down to top are: Group--> CombinedGroup --> Category --> Brain  
+** Layers 
+
+from down to top are: Group--> CombinedGroup --> Category --> Brain  
 
 
 * Using RedisBrain
