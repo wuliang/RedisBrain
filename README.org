@@ -1,0 +1,69 @@
+* What is RedisBrain?
+
+RedisBrain use Redis as backend to model some features of brain. 
+
+Some features of brain:                                                                                                                                                                                                                             |                 |
+ 
+ 1) Brain is structed.
+Brain is consist of some major components. Each compnent has its own
+structure. The minimal functional unit is neurons. 
+ 
+ 2) Accumulable Memory
+What has learned will be stored. No need to re-study.
+
+ 3) Volume is limited 
+No matter how hard to try, it is impossible to remember every words in
+the Book named  “The dream of Red Mansion” （Chinese novel)
+
+ 4) may "forget"
+Least active content may lose. Howerver, it is not just bad, since it
+give new information a oppertunity to .
+
+
+** A Brain Model with Redis
+The basic model is "Group", each group is mapped to a sorted set(zset)
+in Redis. Each group has a volume limitaion and forget slightly
+different with others.
+ 
+Layers from down to top are: Group--> CombinedGroup --> Category --> Brain  
+
+
+* Using RedisBrain
+I use this brain model to implement a Chinese Parser.
+Everyday I fetch some content from internet (using
+[[https://github.com/wuliang/Wuthering]]) and feed the brain. So it is a
+unsupervised learning procedure.
+
+** Some result:
+
+: (我 (爱 (北京 天安门)))
+: (好好 (打 ((一 架) 钢琴)))
+: (无论 (你 (喜欢 与否)))
+: ((在 眼下) 的中国)
+: ((在北京 (这样 (所谓的 国际化))) 都市)
+: (全职 (太太 ((已经 (不再是 有钱人)) (的 专利))))
+: (而是 ((逐渐 (走向 平民)) 化))
+: ((((我的 全职) 闺) 密) 中)
+: ((因 着) (((物以类聚 的) 社交) 原则))
+: (几乎 ((都 符合) (如下 特征)))
+: 工薪阶层
+: (家境 小康)
+: (有一 (((到 两个) (低 龄)) 小孩))
+: (全家 (每年 (至少 ((安排 (一次 长途)) 旅游))))
+: (每周 (去 (一次 沃尔玛)))
+: ((麦 (德 (隆 (之类 的大)))) 超市)
+: ((偶尔 (花 (大 (价钱 ((((买 有机) 蔬菜) 和) 有机))))) 肉)
+: (其他 ((额外 花费) 包括))
+: ((((情人节 扎堆) 看) 一场) 电影)
+: (到 (海底 (捞 (饕餮 (一 顿)))))
+: (到 ((颐和园 发) 发呆))
+: (享受 (一 (把 (((慈禧太后 的) 夏日) 心情))))
+: ((今天 (很多 女孩子)) 越来越)
+: (越来越 强势)
+
+You can compare it with [[https://github.com/wuliang/TinyChineseWordSeg]],
+which just make word segmentation.
+
+** Release
+- Sat Apr  7 04:15:40 CST 2012
+by wuliang [www.wuliang.cn at gmail.com]
