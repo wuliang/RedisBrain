@@ -1,6 +1,7 @@
 * What is RedisBrain?
 
 RedisBrain use Redis as backend to model some features of brain. 
+Redis' homepage  [[http://redis.io/]] (now a part of vmware)
 
 Some features of brain:
  
