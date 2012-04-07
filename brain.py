@@ -442,20 +442,25 @@ class Category():
             yield self.getSegment(setence, child)
 
 
-    def getSegment(self, text, child):
+    def getSegment(self, text, child, maxlen=None):
 
         def _getCandidate(i, left, right):
             left_range = (i, i+left-1)
             right_range = (i+left, i+left+right-1)
             left_item = table[left_range]
             right_item = table[right_range]
-            return ("("+ left_item[0]+" "+right_item[0]+")", left_item[1] * right_item[1])
+            adjust = 1 # - abs(left-right) / float(left+right) # like balance 
+
+
+            return ("("+ left_item[0]+" "+right_item[0]+")", left_item[1] * right_item[1] * adjust,  False)
 
         table = {}    
         grams = self.splitTerms(text)
         n = len(grams)
         size = len(grams[0])
- 
+        minlen = 1
+        if not maxlen:
+            maxlen = size
  
         for current_size in xrange(1, size+1):
             if child:
@@ -464,25 +469,33 @@ class Category():
                 candidates = []
                 for count in xrange(1, (current_size/2) + 1):
                     left, right = count, current_size - count
-                    candidates.append(_getCandidate(i, left, right))
+                    candi = _getCandidate(i, left, right)
+                    if candi:
+                        candidates.append(candi)
                     if left != right:
                         left, right = right, left
-                        candidates.append(_getCandidate(i, left, right))
-                if current_size <= n:
-                    candidates.append(grams[current_size-1][i])
+                        candi = _getCandidate(i, left, right)
+                        if candi:
+                            candidates.append(candi)
+                if current_size <= n and current_size <=maxlen :
+                    gram = grams[current_size-1][i]
+                    candidates.append((gram[0], gram[1],  current_size>minlen))
                 # child is the dictionary
-                if child and current_size <= child.ngram:
+                if child and current_size <= child.ngram and current_size <=maxlen:
                     str = text[i:current_size+i]
-
-                    score = child.getAtom(str, current_size)
-               
+                    score = child.getAtom(str, current_size)               
                     if score and child_sum:                        
                         p = score/child_sum
                         #print "Have Entry %s %f" % (str,  p)                        
-                        candidates.append((str, p))
+                        candidates.append((str, p, current_size>minlen))
                 candidates = sorted(candidates, key=lambda x: x[1], reverse=True)
                 current_range = (i, i+current_size-1)
-                table[current_range] = candidates[0]
+                win = candidates[0]
+                if win[2] and current_size>minlen:
+                    sub = self.getSegment(win[0], child, maxlen=maxlen-1)
+                    assert (not sub[2])
+                    win = (sub[0],  win[1], False)
+                table[current_range] = win
                 #print "Select for range:", current_range, candidates[0][0], candidates[0][1]
                 
         return table[(0, size-1)]
