@@ -4,7 +4,7 @@ RedisBrain use Redis as backend to model some features of brain.
 
 Some features of brain:
  
-** Brain is structed.
+** Brain is structed
 Brain is consist of some major components. Each compnent has its own
 structure. The minimal functional unit is neurons. 
  
@@ -17,7 +17,7 @@ the Book named  “The dream of Red Mansion” （Chinese novel)
 
 ** May "forget"
 Least active content may lose. Howerver, it is not just bad, since it
-give new information a oppertunity to .
+give new information a oppertunity to be stored.
 
 
 * A Brain Model with Redis
@@ -68,4 +68,5 @@ which just make word segmentation.
 
 ** Release
 - Sat Apr  7 04:15:40 CST 2012
-by wuliang [www.wuliang.cn at gmail.com]
+by wuliang [www dot wuliang dot cn at gmail box]
+
